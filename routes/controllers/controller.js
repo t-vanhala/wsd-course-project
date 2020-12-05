@@ -1,5 +1,5 @@
 import * as service from "../../services/service.js";
-import * as bcrypt from "https://deno.land/x/bcrypt@v0.2.4/mod.ts";
+import * as deps from "../../deps.js";
 
 const mainPage = async({render}) => {
   render('index.ejs');
@@ -35,7 +35,7 @@ const tryRegister = async({request}) => {
     return 'The email is already reserved.';
   }
 
-  const hash = await bcrypt.hash(password);
+  const hash = await deps.hash(password);
   await service.addUser(email, hash);
   return 'Registration successful. You can log in now.';
 };
