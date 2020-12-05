@@ -10,10 +10,11 @@ const showLogin = async({render}) => {
 }
 
 const showRegister = async({render}) => {
-  render('register.ejs');
+  render('register.ejs', {message: ''});
 }
 
-const registerUser = async({request, response}) => {
+// Try register user, return message about operation.
+const tryRegister = async({request}) => {
   const body = request.body();
   const params = await body.value;
   
@@ -22,19 +23,26 @@ const registerUser = async({request, response}) => {
   const verification = params.get('verification');
 
   if (password !== verification) {
-    response.body = 'The entered passwords did not match';
-    return;
+    return 'The entered passwords did not match';
+  }
+
+  if (password.length < 4) {
+    return 'Password must contain at least 4 characters';
   }
 
   const already_used = await service.areExistingUsers(email);
   if (already_used) {
-    response.body = 'The email is already reserved.';
-    return;
+    return 'The email is already reserved.';
   }
 
   const hash = await bcrypt.hash(password);
   await service.addUser(email, hash);
-  response.body = 'Registration successful!';
+  return 'Registration successful. You can log in now.';
 };
+
+const registerUser = async({request, render}) => {
+  const ret_msg = await tryRegister({request});
+  render('register.ejs', {message: ret_msg});
+}
 
 export { mainPage, showLogin, showRegister, registerUser };
