@@ -1,8 +1,9 @@
 <%- include('./partials/header.ejs') %>
-<h1>Login!</h1>
-<form method="POST" action="/auth/login">
+<h1>Register!</h1>
+<form method="POST" action="/auth/register">
     <input type="email" name="email" placeholder="Email" />
     <input type="password" name="password" placeholder="Password" />
-    <input type="submit" value="Login!" />
+    <input type="password" name="verification" placeholder="Password again" />
+    <input type="submit" value="Submit!" />
 </form>
 <%- include('./partials/footer.ejs') %>

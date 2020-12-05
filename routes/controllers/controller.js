@@ -5,5 +5,9 @@ const mainPage = async({render}) => {
 const showLogin = async({render}) => {
   render('login.ejs');
 }
+
+const showRegister = async({render}) => {
+  render('register.ejs');
+}
  
-export { mainPage, showLogin };
+export { mainPage, showLogin, showRegister };

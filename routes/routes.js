@@ -6,6 +6,7 @@ const router = new Router();
 
 router.get('/', controller.mainPage);
 router.get('/auth/login', controller.showLogin);
+router.get('/auth/registration', controller.showRegister);
 
 // router.get('/api/hello', api.getHello);
 // router.post('/api/hello', api.setHello);
