@@ -1,0 +1,7 @@
+<% if (errors && errors[attribute]) { %>
+    <ul>
+        <% Object.values(errors[attribute]).forEach((err) => { %>
+            <li><p style="color:red"><%= err %></p></li>
+        <% }); %>
+    </ul>
+<% } %>

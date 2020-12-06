@@ -1,0 +1,43 @@
+<%- include('./partials/header.ejs') %>
+<h1>Report morning!</h1>
+<% if (!morning_reported) { %>
+    <h2>Submit a new report from this morning</h2>
+<% } else { %>
+    <h2>You are changing already submitted morning report</h2>
+<% } %>
+<form method="POST" action="/behavior/reporting/morning">
+    <br>
+    <%- include('morning_errors.ejs', { errors: errors, attribute: 'date'}) %>
+    <p>Day to report. By default, this date.</p>
+    <input type="date" name="date" />
+    </br>
+    <br>
+    <%- include('morning_errors.ejs', { errors: errors, attribute: 'sleep_duration'}) %>
+    <p>Sleep duration from 0 to 24h. Decimals are accepted.</p>
+    <input type="number" name="sleep_duration" step=".1" min=0 max=24 placeholder="Sleep duration" />
+    </br>
+    <br>
+    <div>
+        <%- include('morning_errors.ejs', { errors: errors, attribute: 'sleep_quality'}) %>
+        <p>Sleep quality:</p>
+        1 <input name="sleep_quality" type="radio" value="1"/>
+        2 <input name="sleep_quality" type="radio" value="2"/>
+        3 <input name="sleep_quality" type="radio" value="3"/>
+        4 <input name="sleep_quality" type="radio" value="4"/>
+        5 <input name="sleep_quality" type="radio" value="5"/>
+    </div>
+    </br>
+    <br>
+    <div>
+        <%- include('morning_errors.ejs', { errors: errors, attribute: 'generic_mood'}) %>
+        <p>Generic mood:</p>
+        1 <input name="generic_mood" type="radio" value="1"/>
+        2 <input name="generic_mood" type="radio" value="2"/>
+        3 <input name="generic_mood" type="radio" value="3"/>
+        4 <input name="generic_mood" type="radio" value="4"/>
+        5 <input name="generic_mood" type="radio" value="5"/>
+    </div>
+    </br>
+    <input type="submit" value="Submit report!" />
+</form>
+<%- include('./partials/footer.ejs') %>
