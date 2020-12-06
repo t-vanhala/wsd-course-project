@@ -1,6 +1,6 @@
 <%- include('./partials/header.ejs') %>
 <h1>Report morning!</h1>
-<% if (!morning_reported) { %>
+<% if (!this_morning_reported) { %>
     <h2>Submit a new report from this morning</h2>
 <% } else { %>
     <h2>You are changing already submitted morning report</h2>
@@ -40,4 +40,9 @@
     </br>
     <input type="submit" value="Submit report!" />
 </form>
+<% if (message.length > 0 && message.includes("not")) { %>
+    <p style="color:red"><%= message %></p>
+<% } else if (message.length > 0) { %>
+    <p style="color:green"><%= message %></p>
+<% } %>
 <%- include('./partials/footer.ejs') %>

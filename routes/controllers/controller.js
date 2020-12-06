@@ -17,8 +17,8 @@ const showReportingPage = async({render}) => {
   // Check if user has already completed reporting for the day
   // TODO: use user id from session
   const user_id = 1; // FIX THIS!
-  const morning_reporting_done = await service.hasReportedMorning(user_id);
-  const evening_reporting_done = await service.hasReportedEvening(user_id);
+  const morning_reporting_done = await service.hasReportedMorning(user_id, null);
+  const evening_reporting_done = await service.hasReportedEvening(user_id, null);
   render('reporting.ejs', {morning_reporting_done: morning_reporting_done,
     evening_reporting_done: evening_reporting_done})
 }
@@ -59,8 +59,9 @@ const reportMorning = async({request, render}) => {
   //const ret_msg = await tryMorningReporting({request});
   const user_id = 1; // FIX THIS!
   const data = {
-    morning_reported: await service.hasReportedMorning(user_id),
-    errors: null
+    this_morning_reported: await service.hasReportedMorning(user_id, ''),
+    errors: null,
+    message: ""
   }
   render('morning_report.ejs', data);
 }
@@ -74,12 +75,14 @@ const morningReportValidationRules = {
 
 const getMorningReportData = async(request) => {
   const data = {
-    morning_reported: "",
-    date: "",
+    user_id: "",
+    this_morning_reported: "",
+    date: null,
     sleep_duration: "",
     sleep_quality: "",
     generic_mood: "",
-    errors: null
+    errors: null,
+    message: ""
   };
 
   if (request) {
@@ -95,25 +98,50 @@ const getMorningReportData = async(request) => {
 };
 
 const submitMorningReport = async({request, render}) => {
-  const user_id = 1; // FIX THIS!
   const data = await getMorningReportData(request);
   // Validate data
   const [passes, errors] = await deps.validate(data, morningReportValidationRules);
-  data.morning_reported = await service.hasReportedMorning(user_id);
+  data.user_id = 1; // FIX THIS! Take value from session..
+  data.this_morning_reported = await service.hasReportedMorning(data.user_id, null);
   if (passes) {
     // Lets add data to database
+    
+    // First check if date is given
+    if (data.date) {
+      // Check if given date is reported
+      if (await service.hasReportedMorning(data.user_id, data.date)) {
+        // Update report
+        service.updateMorningReport(data);
+      } else {
+        // Create a new report for that day
+        service.addMorningReport(data);
+      }
+    } else {
+      // Date not given, and we know if today has been reported
+      if (data.this_morning_reported) {
+        // Update this morning report
+        service.updateMorningReport(data);
+      } else {
+        // Add new report for this morning
+        service.addMorningReport(data);
+      }
+    }
 
+    // If already has reported morning, lets just update the earlier report
+    if (data.this_morning_reported) {
+      service.updateMorningReport(data);
+    } else {
+      service.addMorningReport(data);
+    }
+    data.message = "Report submitted!";
     render('morning_report.ejs', data);
   } else {
     // Data is not added to db. Show errors to user.
     console.log(errors);
     data.errors = errors;
+    data.message = "Report not submitted!";
     render('morning_report.ejs', data);
   }
-  //const ret_msg = await tryMorningReporting({request});
-  // const user_id = 1; // FIX THIS!
-  // render('morning_report.ejs', {morning_reported: await service.hasReportedMorning(user_id),
-  //   message: ''});
 }
 
 export { mainPage, showLogin, showRegister, showReportingPage, registerUser, reportMorning, submitMorningReport };
