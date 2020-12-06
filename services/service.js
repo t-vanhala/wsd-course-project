@@ -88,5 +88,14 @@ const updateEveningReport = async(data) => {
   }
 }
 
+const getWeekSummary = async(user_id, first_day, last_day) => {
+  const res = await executeQuery("SELECT AVG(sleep_duration), AVG(time_sports), AVG(time_studying), AVG(sleep_quality), AVG(morning_reports.generic_mood) FROM morning_reports, evening_reports WHERE morning_reports.user_id = evening_reports.user_id AND morning_reports.r_date >= $1 AND morning_reports.r_date <= $2 AND evening_reports.r_date >= $1 AND evening_reports.r_date <= $2;", first_day, last_day);
+  if (res && res.rowCount > 0) {
+    return res.rowsOfObjects();
+  }
+  return [];
+}
+
 export { areExistingUsers, addUser, hasReportedMorning, hasReportedEvening,
-  addMorningReport, updateMorningReport, addEveningReport, updateEveningReport };
+  addMorningReport, updateMorningReport, addEveningReport, updateEveningReport,
+  getWeekSummary };

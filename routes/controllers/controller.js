@@ -222,5 +222,37 @@ const submitEveningReport = async({request, render}) => {
   }
 }
 
+const getMondayFromSunday = (sunday) => {
+  const monday = new Date(sunday.getFullYear(), sunday.getMonth(), sunday.getDate() - 6);
+  const last_week_month = monday.getMonth() + 1;
+  const last_week_day = monday.getDate();
+  const last_week_year = monday.getFullYear();
+
+  return last_week_year + "-" + last_week_month + "-" + last_week_day;
+}
+
+const getLastWeek = () => {
+  const today = new Date();
+  const last_week = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+  return last_week;
+}
+
+const getSummary = async({request, render}) => {
+  const user_id = 1; // FIX THIS!
+  // Get last week dates
+  const last_week = getLastWeek();
+  const last_week_month = last_week.getMonth() + 1;
+  const last_week_day = last_week.getDate();
+  const last_week_year = last_week.getFullYear();
+
+  const last_week_sunday = last_week_year + "-" + last_week_month + "-" + last_week_day;
+  const last_week_monday = getMondayFromSunday(new Date(last_week_year, last_week_month - 1, last_week_day));
+
+  const data = await service.getWeekSummary(user_id, last_week_monday, last_week_sunday);
+  console.log(data);
+  //render('summary.ejs', data);
+}
+
 export { mainPage, showLogin, showRegister, showReportingPage, registerUser,
-  reportMorning, submitMorningReport, reportEvening, submitEveningReport };
+  reportMorning, submitMorningReport, reportEvening, submitEveningReport,
+  getSummary };
