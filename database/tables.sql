@@ -19,8 +19,7 @@ CREATE TABLE evening_reports (
     r_date DATE DEFAULT CURRENT_DATE,
     time_sports FLOAT,
     time_studying FLOAT,
-    regularity INTEGER CHECK(regularity <= 5 AND regularity >= 1),
-    eating_quality INTEGER CHECK(eating_quality <= 5 AND eating_quality >= 1),
+    reg_and_eating INTEGER CHECK(reg_and_eating <= 5 AND reg_and_eating >= 1),
     generic_mood INTEGER CHECK(generic_mood <= 5 AND generic_mood >= 1),
     user_id INTEGER REFERENCES users(id)
 );
