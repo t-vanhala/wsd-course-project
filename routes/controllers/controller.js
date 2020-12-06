@@ -56,7 +56,6 @@ const registerUser = async({request, render}) => {
 }
 
 const reportMorning = async({request, render}) => {
-  //const ret_msg = await tryMorningReporting({request});
   const user_id = 1; // FIX THIS!
   const data = {
     this_morning_reported: await service.hasReportedMorning(user_id, ''),
@@ -69,8 +68,8 @@ const reportMorning = async({request, render}) => {
 const morningReportValidationRules = {
   date: [deps.isDate],
   sleep_duration: [deps.required, deps.numberBetween(0, 24)],
-  sleep_quality: [deps.required, deps.numberBetween(1, 5)],
-  generic_mood: [deps.required, deps.numberBetween(1, 5)],
+  sleep_quality: [deps.required, deps.numberBetween(1, 5), deps.isInt],
+  generic_mood: [deps.required, deps.numberBetween(1, 5), deps.isInt],
 };
 
 const getMorningReportData = async(request) => {
@@ -127,12 +126,6 @@ const submitMorningReport = async({request, render}) => {
       }
     }
 
-    // If already has reported morning, lets just update the earlier report
-    if (data.this_morning_reported) {
-      service.updateMorningReport(data);
-    } else {
-      service.addMorningReport(data);
-    }
     data.message = "Report submitted!";
     render('morning_report.ejs', data);
   } else {
@@ -144,4 +137,90 @@ const submitMorningReport = async({request, render}) => {
   }
 }
 
-export { mainPage, showLogin, showRegister, showReportingPage, registerUser, reportMorning, submitMorningReport };
+const reportEvening = async({request, render}) => {
+  const user_id = 1; // FIX THIS!
+  const data = {
+    this_evening_reported: await service.hasReportedEvening(user_id, ''),
+    errors: null,
+    message: ""
+  }
+  render('evening_reports.ejs', data);
+}
+
+const eveningReportValidationRules = {
+  date: [deps.isDate],
+  sports_and_exercises: [deps.required, deps.numberBetween(0, 24)],
+  studying: [deps.required, deps.numberBetween(0, 24)],
+  reg_and_eating: [deps.required, deps.numberBetween(1, 5), deps.isInt],
+  generic_mood: [deps.required, deps.numberBetween(1, 5), deps.isInt],
+};
+
+const getEveningReportData = async(request) => {
+  const data = {
+    user_id: "",
+    this_evening_reported: "",
+    date: null,
+    sports_and_exercises: "",
+    studying: "",
+    reg_and_eating: "",
+    generic_mood: "",
+    errors: null,
+    message: ""
+  };
+
+  if (request) {
+    const body = request.body();
+    const params = await body.value;
+    data.date = params.get("date");
+    data.sports_and_exercises = Number(params.get("sports_and_exercises"));
+    data.studying = Number(params.get("studying"));
+    data.reg_and_eating = Number(params.get("reg_and_eating"));
+    data.generic_mood = Number(params.get("generic_mood"));
+  }
+
+  return data;
+};
+
+const submitEveningReport = async({request, render}) => {
+  const data = await getEveningReportData(request);
+  // Validate data
+  const [passes, errors] = await deps.validate(data, eveningReportValidationRules);
+  data.user_id = 1; // FIX THIS! Take value from session..
+  data.this_evening_reported = await service.hasReportedEvening(data.user_id, null);
+  if (passes) {
+    // Lets add data to database
+    
+    // First check if date is given
+    if (data.date) {
+      // Check if given date is reported
+      if (await service.hasReportedEvening(data.user_id, data.date)) {
+        // Update report
+        service.updateEveningReport(data);
+      } else {
+        // Create a new report for that day
+        service.addEveningReport(data);
+      }
+    } else {
+      // Date not given, and we know if today has been reported
+      if (data.this_evening_reported) {
+        // Update this evening report
+        service.updateEveningReport(data);
+      } else {
+        // Add new report for this evening
+        service.addEveningReport(data);
+      }
+    }
+
+    data.message = "Report submitted!";
+    render('evening_reports.ejs', data);
+  } else {
+    // Data is not added to db. Show errors to user.
+    console.log(errors);
+    data.errors = errors;
+    data.message = "Report not submitted!";
+    render('evening_reports.ejs', data);
+  }
+}
+
+export { mainPage, showLogin, showRegister, showReportingPage, registerUser,
+  reportMorning, submitMorningReport, reportEvening, submitEveningReport };
