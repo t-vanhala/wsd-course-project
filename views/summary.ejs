@@ -1,0 +1,12 @@
+<%- include('./partials/header.ejs') %>
+<h1>Summary page!</h1>
+<h2>Summary about last week:</h2>
+<ul>
+    <% last_week_summary.forEach((obj) => { %>
+        <br>Average sleep duration: <%= obj.avg_sleep_dur %> hours</br>
+        <br>Average time doing sports and exercises: <%= obj.avg_time_sports %> hours</br>
+        <br>Average time studying: <%= obj.avg_time_studying %> hours</br>
+        <br>Average generic mood: <%= obj.avg_gen_mood %></br>
+    <% }); %>
+</ul>
+<%- include('./partials/footer.ejs') %>

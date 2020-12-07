@@ -248,9 +248,12 @@ const getSummary = async({request, render}) => {
   const last_week_sunday = last_week_year + "-" + last_week_month + "-" + last_week_day;
   const last_week_monday = getMondayFromSunday(new Date(last_week_year, last_week_month - 1, last_week_day));
 
-  const data = await service.getWeekSummary(user_id, last_week_monday, last_week_sunday);
-  console.log(data);
-  //render('summary.ejs', data);
+  const q = await service.getSummaryBetweenDays(user_id, last_week_monday, last_week_sunday);
+  console.log(q);
+  const data = {
+    last_week_summary: await service.getSummaryBetweenDays(user_id, last_week_monday, last_week_sunday),
+  };
+  render('summary.ejs', data);
 }
 
 export { mainPage, showLogin, showRegister, showReportingPage, registerUser,
