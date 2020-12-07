@@ -300,6 +300,14 @@ const getLastMonthLastDay = () => {
   return last_month_last_day;
 }
 
+const getMonthFirstDay = (month, year) => {
+  return new Date(year, month - 1, 1);
+}
+
+const getMonthLastDay = (month, year) => {
+  return new Date(year, month, 0);
+}
+
 const getSummary = async({request, render}) => {
   const user_id = 1; // FIX THIS!
 
@@ -320,8 +328,6 @@ const getSummary = async({request, render}) => {
   // -- monthly default summary:
   const first_day_last_month = stringifyDate(getLastMonthFirstDay());
   const last_day_last_month = stringifyDate(getLastMonthLastDay());
-  console.log(first_day_last_month);
-  console.log(last_day_last_month);
   const month_summary = await service.getSummaryBetweenDays(user_id, first_day_last_month, last_day_last_month);
 
   const data = {
@@ -343,8 +349,6 @@ const searchSummary = async({request, render}) => {
   const week = params.get('week');
   const week_number = week.substring(6);
   const week_year = week.substring(0, 4);
-  const month = params.get('month');
-
   const week_first_day = getFirstDateOfWeek(week_number, week_year);
   
   // These can be used with psql
@@ -352,12 +356,27 @@ const searchSummary = async({request, render}) => {
   const week_end = getSundayFromMonday(week_first_day);
   
   const week_summary = await service.getSummaryBetweenDays(user_id, week_start, week_end);
+  
+  const month = params.get('month');
+  const month_number = month.substring(5);
+  const month_year = month.substring(0, 4);
+  const first_day_month = stringifyDate(getMonthFirstDay(month_number, month_year));
+  const last_day_month = stringifyDate(getMonthLastDay(month_number, month_year));
+  console.log(first_day_month);
+  console.log(last_day_month);
+  const month_summary = await service.getSummaryBetweenDays(user_id, first_day_month, last_day_month);
+
   const data = {
     week_summary: week_summary,
+    month_summary: month_summary,
     default_week: false,
+    default_month: false,
     week_number: week_number,
     week_year: week_year,
+    month_number: month_number,
+    month_year: month_year,
     week_data_nullable: checkDataNullable(week_summary),
+    month_data_nullable: checkDataNullable(month_summary),
   };
   render('summary.ejs', data);
 

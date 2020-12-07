@@ -19,7 +19,7 @@
             <br>Average generic mood: <%= obj.avg_gen_mood %></br>
         <% }); %>
     <% } else { %>
-        <br>No data exist, please select another week!</br>
+        <br><p style="color:red">No data exist, please select another week!</p></br>
     <% } %>
 </ul>
 <% if (default_month) { %>
@@ -36,7 +36,7 @@
             <br>Average generic mood: <%= obj.avg_gen_mood %></br>
         <% }); %>
     <% } else { %>
-        <br>No data exist, please select another month!</br>
+        <br><p style="color:red">No data exist, please select another month!</p></br>
     <% } %>
 </ul>
 <%- include('./partials/footer.ejs') %>
