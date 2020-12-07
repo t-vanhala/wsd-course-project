@@ -11,7 +11,7 @@
     <br><h2>Showing week number <%= week_number %> of year <%= week_year %>:</h2></br>
 <% } %>
 <ul>
-    <% if (!data_nullable) { %>
+    <% if (!week_data_nullable) { %>
         <% week_summary.forEach((obj) => { %>
             <br>Average sleep duration: <%= obj.avg_sleep_dur %> hours</br>
             <br>Average time doing sports and exercises: <%= obj.avg_time_sports %> hours</br>
