@@ -40,6 +40,13 @@ const login = async({request, response, render, session}) => {
   response.redirect('/');
 }
 
+const logout = async({response, session}) => {
+  await session.set('authenticated', null);
+  await session.set('user', null);
+
+  response.redirect('/auth/login');
+}
+
 const showRegister = async({render}) => {
   render('./auth/register.ejs', {message: ''});
 }
@@ -76,4 +83,4 @@ const registerUser = async({request, render}) => {
   render('./auth/register.ejs', {message: ret_msg});
 }
 
-export { mainPage, showLogin, login, showRegister, registerUser };
+export { mainPage, showLogin, login, logout, showRegister, registerUser };
