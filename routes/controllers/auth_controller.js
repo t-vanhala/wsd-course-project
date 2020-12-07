@@ -18,7 +18,7 @@ const login = async({request, response, render, session}) => {
 
   const res = await service.getLoginInfo(email);
   if (res.rowCount === 0) {
-    render('./auth/login.ejs', {message: 'Authentication failed.'});
+    render('./auth/login.ejs', {message: 'Invalid email or password'});
     return;
   }
 
@@ -28,7 +28,7 @@ const login = async({request, response, render, session}) => {
 
   const passwordCorrect = await deps.compare(password, hash);
   if (!passwordCorrect) {
-    render('./auth/login.ejs', {message: 'Authentication failed.'});
+    render('./auth/login.ejs', {message: 'Invalid email or password'});
     return;
   }
 
