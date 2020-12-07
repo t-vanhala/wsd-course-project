@@ -222,19 +222,45 @@ const submitEveningReport = async({request, render}) => {
   }
 }
 
-const getMondayFromSunday = (sunday) => {
-  const monday = new Date(sunday.getFullYear(), sunday.getMonth(), sunday.getDate() - 6);
-  const last_week_month = monday.getMonth() + 1;
-  const last_week_day = monday.getDate();
-  const last_week_year = monday.getFullYear();
+// Function to convert date to POSTGRESQL-friendly form
+const stringifyDate = (day) => {
+  const week_month = day.getMonth() + 1;
+  const week_day = day.getDate();
+  const week_year = day.getFullYear();
 
-  return last_week_year + "-" + last_week_month + "-" + last_week_day;
+  return week_year + "-" + week_month + "-" + week_day;
+}
+
+// Function to get same week monday from sunday OR sunday from monday.
+const getWeek = (mondayOrSunday, monday) => {
+  let day = new Date(mondayOrSunday.getFullYear(), mondayOrSunday.getMonth(), mondayOrSunday.getDate() - 6);
+  if (monday) {
+    day = new Date(mondayOrSunday.getFullYear(), mondayOrSunday.getMonth(), mondayOrSunday.getDate() + 6);
+  }
+  return stringifyDate(day);
 }
 
 const getLastWeek = () => {
   const today = new Date();
   const last_week = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
   return last_week;
+}
+
+const checkDataNullable = (summary) => {
+  let count = 0;
+  let length = 0;
+  summary.forEach((obj) => {
+    for (const [key, value] of Object.entries(obj)) {
+      length++;
+      if (!value)
+        count++;
+    };
+  });
+  if (count === length) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 const getSummary = async({request, render}) => {
@@ -246,16 +272,52 @@ const getSummary = async({request, render}) => {
   const last_week_year = last_week.getFullYear();
 
   const last_week_sunday = last_week_year + "-" + last_week_month + "-" + last_week_day;
-  const last_week_monday = getMondayFromSunday(new Date(last_week_year, last_week_month - 1, last_week_day));
+  const last_week_monday = getWeek(new Date(last_week_year, last_week_month - 1, last_week_day), false);
 
-  const q = await service.getSummaryBetweenDays(user_id, last_week_monday, last_week_sunday);
-  console.log(q);
+  const week_summary = await service.getSummaryBetweenDays(user_id, last_week_monday, last_week_sunday);
   const data = {
-    last_week_summary: await service.getSummaryBetweenDays(user_id, last_week_monday, last_week_sunday),
+    week_summary: week_summary,
+    default_week: true,
+    data_nullable: checkDataNullable(week_summary),
   };
   render('summary.ejs', data);
 }
 
+function getDateOfWeek(w, y) {
+  let date = new Date(y, 0, (1 + (w - 1) * 7)); // Elle's method
+  date.setDate(date.getDate() + (1 - date.getDay())); // 0 - Sunday, 1 - Monday etc
+  return date
+}
+
+const searchSummary = async({request, render}) => {
+  const user_id = 1; // FIX THIS!
+  const body = request.body();
+  const params = await body.value;
+  
+  const week = params.get('week');
+  const week_number = week.substring(6);
+  const week_year = week.substring(0, 4);
+  const month = params.get('month');
+
+  const week_first_day = getDateOfWeek(week_number, week_year);
+  
+  // These can be used with psql
+  const week_start = stringifyDate(week_first_day);
+  const week_end = getWeek(week_first_day, true);
+  
+  const week_summary = await service.getSummaryBetweenDays(user_id, week_start, week_end);
+  const data = {
+    week_summary: week_summary,
+    default_week: false,
+    week_number: week_number,
+    week_year: week_year,
+    data_nullable: checkDataNullable(week_summary),
+  };
+  console.log(data.week_summary);
+  render('summary.ejs', data);
+
+}
+
 export { mainPage, showLogin, showRegister, showReportingPage, registerUser,
   reportMorning, submitMorningReport, reportEvening, submitEveningReport,
-  getSummary };
+  getSummary, searchSummary };

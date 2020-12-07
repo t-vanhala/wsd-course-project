@@ -14,7 +14,7 @@ router.post('/behavior/reporting/morning', controller.submitMorningReport);
 router.get('/behavior/reporting/evening', controller.reportEvening);
 router.post('/behavior/reporting/evening', controller.submitEveningReport);
 router.get('/behavior/summary', controller.getSummary);
-//router.post('/behavior/summary', controller.searchSummary);
+router.post('/behavior/summary', controller.searchSummary);
 
 // router.get('/api/hello', api.getHello);
 // router.post('/api/hello', api.setHello);
