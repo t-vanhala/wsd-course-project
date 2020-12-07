@@ -264,7 +264,6 @@ const getFirstDateOfWeek = (week, year) => {
   return date
 }
 
-
 // This script is released to the public domain and may be used, modified and
 // distributed without restrictions. Attribution not necessary but appreciated.
 // Source: https://weeknumber.net/how-to/javascript
@@ -289,8 +288,23 @@ Date.prototype.getWeekYear = function() {
   return date.getFullYear();
 }
 
+const getLastMonthFirstDay = () => {
+  const today = new Date();
+  const last_month_first_day = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+  return last_month_first_day;
+}
+
+const getLastMonthLastDay = () => {
+  const today = new Date();
+  const last_month_last_day = new Date(today.getFullYear(), today.getMonth(), 0);
+  return last_month_last_day;
+}
+
 const getSummary = async({request, render}) => {
   const user_id = 1; // FIX THIS!
+
+  // -- weekly default summary:
+
   // Get last week dates
   const last_week_date = getLastWeekDate();
   const week_number = last_week_date.getWeek();
@@ -302,10 +316,21 @@ const getSummary = async({request, render}) => {
   const last_week_sunday = getSundayFromMonday(last_week_first_day);
 
   const week_summary = await service.getSummaryBetweenDays(user_id, last_week_monday, last_week_sunday);
+
+  // -- monthly default summary:
+  const first_day_last_month = stringifyDate(getLastMonthFirstDay());
+  const last_day_last_month = stringifyDate(getLastMonthLastDay());
+  console.log(first_day_last_month);
+  console.log(last_day_last_month);
+  const month_summary = await service.getSummaryBetweenDays(user_id, first_day_last_month, last_day_last_month);
+
   const data = {
     week_summary: week_summary,
+    month_summary: month_summary,
     default_week: true,
+    default_month: true,
     week_data_nullable: checkDataNullable(week_summary),
+    month_data_nullable: checkDataNullable(month_summary),
   };
   render('summary.ejs', data);
 }
@@ -334,7 +359,6 @@ const searchSummary = async({request, render}) => {
     week_year: week_year,
     week_data_nullable: checkDataNullable(week_summary),
   };
-  console.log(data.week_summary);
   render('summary.ejs', data);
 
 }

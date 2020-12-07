@@ -22,4 +22,21 @@
         <br>No data exist, please select another week!</br>
     <% } %>
 </ul>
+<% if (default_month) { %>
+    <br><h2>Summary about last month:</h2></br>
+<% } else { %>
+    <br><h2>Showing month number <%= month_number %> of year <%= month_year %>:</h2></br>
+<% } %>
+<ul>
+    <% if (!month_data_nullable) { %>
+        <% month_summary.forEach((obj) => { %>
+            <br>Average sleep duration: <%= obj.avg_sleep_dur %> hours</br>
+            <br>Average time doing sports and exercises: <%= obj.avg_time_sports %> hours</br>
+            <br>Average time studying: <%= obj.avg_time_studying %> hours</br>
+            <br>Average generic mood: <%= obj.avg_gen_mood %></br>
+        <% }); %>
+    <% } else { %>
+        <br>No data exist, please select another month!</br>
+    <% } %>
+</ul>
 <%- include('./partials/footer.ejs') %>
