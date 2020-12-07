@@ -1,8 +1,9 @@
 import * as service from "../../services/basic_service.js";
 import * as deps from "../../deps.js";
+import { getLoggedUserEmail } from "../../utils/utils.js";
 
-const mainPage = async({render}) => {
-  render('index.ejs');
+const mainPage = async({render, session}) => {
+  render('index.ejs', {user_email: await getLoggedUserEmail(session)});
 };
 
 const showLogin = async({render}) => {

@@ -84,6 +84,14 @@ const getMonthLastDay = (month, year) => {
   return new Date(year, month, 0);
 }
 
+const getLoggedUserEmail = async(session) => {
+  const user = await session.get('user');
+  if (user)
+    return user.email;
+  else
+    return '';
+}
+
 export { checkDataNullable, stringifyDate, getSundayFromMonday, getLastWeekDate,
     getFirstDateOfWeek, getLastMonthFirstDay, getLastMonthLastDay, getMonthFirstDay,
-    getMonthLastDay }
+    getMonthLastDay, getLoggedUserEmail }
