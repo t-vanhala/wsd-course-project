@@ -1,4 +1,4 @@
-<%- include('./partials/header.ejs') %>
+<%- include('../partials/header.ejs') %>
 <h1>Report evening!</h1>
 <% if (!this_evening_reported) { %>
     <h2>Submit a new report from this evening</h2>
@@ -7,23 +7,23 @@
 <% } %>
 <form method="POST" action="/behavior/reporting/evening">
     <br>
-    <%- include('print_errors.ejs', { errors: errors, attribute: 'date'}) %>
+    <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'date'}) %>
     <p>Day to report. Can be empty, when current date is used.</p>
     <input type="date" name="date" />
     </br>
     <br>
-    <%- include('print_errors.ejs', { errors: errors, attribute: 'sports_and_exercises'}) %>
+    <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'sports_and_exercises'}) %>
     <p>Time spent on sports and exercise from 0 to 24h. Decimals are accepted.</p>
     <input type="number" name="sports_and_exercises" step=".1" min=0 max=24 value="0" />
     </br>
     <br>
-    <%- include('print_errors.ejs', { errors: errors, attribute: 'studying'}) %>
+    <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'studying'}) %>
     <p>Time spent on studying from 0 to 24h. Decimals are accepted.</p>
     <input type="number" name="studying" step=".1" min=0 max=24 value="0" />
     </br>
     <br>
     <div>
-        <%- include('print_errors.ejs', { errors: errors, attribute: 'reg_and_eating'}) %>
+        <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'reg_and_eating'}) %>
         <p>Regularity and quality of eating:</p>
         1 <input name="reg_and_eating" type="radio" value="1"/>
         2 <input name="reg_and_eating" type="radio" value="2"/>
@@ -34,7 +34,7 @@
     </br>
     <br>
     <div>
-        <%- include('print_errors.ejs', { errors: errors, attribute: 'generic_mood'}) %>
+        <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'generic_mood'}) %>
         <p>Generic mood:</p>
         1 <input name="generic_mood" type="radio" value="1"/>
         2 <input name="generic_mood" type="radio" value="2"/>
@@ -50,4 +50,4 @@
 <% } else if (message.length > 0) { %>
     <p style="color:green"><%= message %></p>
 <% } %>
-<%- include('./partials/footer.ejs') %>
+<%- include('../partials/footer.ejs') %>

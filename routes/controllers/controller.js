@@ -6,11 +6,11 @@ const mainPage = async({render}) => {
 };
 
 const showLogin = async({render}) => {
-  render('login.ejs');
+  render('./auth/login.ejs');
 }
 
 const showRegister = async({render}) => {
-  render('register.ejs', {message: ''});
+  render('./auth/register.ejs', {message: ''});
 }
 
 const showReportingPage = async({render}) => {
@@ -19,7 +19,7 @@ const showReportingPage = async({render}) => {
   const user_id = 1; // FIX THIS!
   const morning_reporting_done = await service.hasReportedMorning(user_id, null);
   const evening_reporting_done = await service.hasReportedEvening(user_id, null);
-  render('reporting.ejs', {morning_reporting_done: morning_reporting_done,
+  render('./reporting/reporting.ejs', {morning_reporting_done: morning_reporting_done,
     evening_reporting_done: evening_reporting_done})
 }
 
@@ -52,7 +52,7 @@ const tryRegister = async({request}) => {
 
 const registerUser = async({request, render}) => {
   const ret_msg = await tryRegister({request});
-  render('register.ejs', {message: ret_msg});
+  render('./auth/register.ejs', {message: ret_msg});
 }
 
 const reportMorning = async({request, render}) => {
@@ -62,7 +62,7 @@ const reportMorning = async({request, render}) => {
     errors: null,
     message: ""
   }
-  render('morning_report.ejs', data);
+  render('./reporting/morning_report.ejs', data);
 }
 
 const morningReportValidationRules = {
@@ -127,13 +127,12 @@ const submitMorningReport = async({request, render}) => {
     }
 
     data.message = "Report submitted!";
-    render('morning_report.ejs', data);
+    render('./reporting/morning_report.ejs', data);
   } else {
     // Data is not added to db. Show errors to user.
-    console.log(errors);
     data.errors = errors;
     data.message = "Report not submitted!";
-    render('morning_report.ejs', data);
+    render('./reporting/morning_report.ejs', data);
   }
 }
 
@@ -144,7 +143,7 @@ const reportEvening = async({request, render}) => {
     errors: null,
     message: ""
   }
-  render('evening_reports.ejs', data);
+  render('./reporting/evening_reports.ejs', data);
 }
 
 const eveningReportValidationRules = {
@@ -212,13 +211,12 @@ const submitEveningReport = async({request, render}) => {
     }
 
     data.message = "Report submitted!";
-    render('evening_reports.ejs', data);
+    render('./reporting/evening_reports.ejs', data);
   } else {
     // Data is not added to db. Show errors to user.
-    console.log(errors);
     data.errors = errors;
     data.message = "Report not submitted!";
-    render('evening_reports.ejs', data);
+    render('./reporting/evening_reports.ejs', data);
   }
 }
 
@@ -349,7 +347,7 @@ const getSummary = async({request, render}) => {
   data.default_month = true;
   data.week_data_nullable = checkDataNullable(week_summary);
   data.month_data_nullable = checkDataNullable(month_summary);
-  render('summary.ejs', data);
+  render('./reporting/summary.ejs', data);
 }
 
 const searchSummary = async({request, render}) => {
@@ -394,7 +392,7 @@ const searchSummary = async({request, render}) => {
     data.month_data_nullable = checkDataNullable(month_summary);
   }
 
-  render('summary.ejs', data);
+  render('./reporting/summary.ejs', data);
 
 }
 
