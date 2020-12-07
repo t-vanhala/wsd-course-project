@@ -1,4 +1,9 @@
 <%- include('../partials/header.ejs') %>
+<% if (user_email.length > 0) { %>
+    <p>You are logged in with email: <%= user_email %></p>
+    <a href="/auth/logout">Logout</a>
+    <br></br>
+<% } %>
 <h1>Report morning!</h1>
 <% if (!this_morning_reported) { %>
     <h2>Submit a new report from this morning</h2>

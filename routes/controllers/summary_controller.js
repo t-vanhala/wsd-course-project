@@ -3,6 +3,7 @@ import * as deps from "../../deps.js";
 import * as utils from "../../utils/utils.js";
 
 const data = {
+  user_email: "",
   week_summary: [],
   month_summary: [],
   default_week: true,
@@ -15,7 +16,7 @@ const data = {
   month_data_nullable: false,
 };
 
-const getSummary = async({request, render}) => {
+const getSummary = async({session, request, render}) => {
   const user_id = 1; // FIX THIS!
 
   // -- weekly default summary:
@@ -37,6 +38,7 @@ const getSummary = async({request, render}) => {
   const last_day_last_month = utils.stringifyDate(utils.getLastMonthLastDay());
   const month_summary = await service.getSummaryBetweenDays(user_id, first_day_last_month, last_day_last_month);
 
+  data.user_email = await utils.getLoggedUserEmail(session);
   data.week_summary = week_summary;
   data.month_summary = month_summary;
   data.default_week = true;
@@ -46,8 +48,9 @@ const getSummary = async({request, render}) => {
   render('./reporting/summary.ejs', data);
 }
 
-const searchSummary = async({request, render}) => {
+const searchSummary = async({session, request, render}) => {
   const user_id = 1; // FIX THIS!
+  data.user_email = await utils.getLoggedUserEmail(session);
   const body = request.body();
   const params = await body.value;
   
