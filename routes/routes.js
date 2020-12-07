@@ -10,6 +10,7 @@ const router = new Router();
 router.get('/', auth_controller.mainPage);
 // Auth related
 router.get('/auth/login', auth_controller.showLogin);
+router.post('/auth/login', auth_controller.login);
 router.get('/auth/registration', auth_controller.showRegister);
 router.post('/auth/registration', auth_controller.registerUser);
 // Behavior related

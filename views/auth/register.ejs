@@ -7,7 +7,7 @@
     <input type="submit" value="Submit!" />
 </form>
 <% if (message.length > 0) { %>
-    <%= message %>
+    <p style="color:red"><%= message %></p>
 <% } %>
 <br><a href="/auth/login">Take me to login page, press here!</a></br>
 <%- include('../partials/footer.ejs') %>

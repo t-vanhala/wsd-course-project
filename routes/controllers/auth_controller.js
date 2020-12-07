@@ -6,7 +6,38 @@ const mainPage = async({render}) => {
 };
 
 const showLogin = async({render}) => {
-  render('./auth/login.ejs');
+  render('./auth/login.ejs', {message: ''});
+}
+
+const login = async({request, response, render, session}) => {
+  const body = request.body();
+  const params = await body.value;
+
+  const email = params.get('email');
+  const password = params.get('password');
+
+  const res = await service.getLoginInfo(email);
+  if (res.rowCount === 0) {
+    render('./auth/login.ejs', {message: 'Authentication failed.'});
+    return;
+  }
+
+  // Results should contain only one line because email is unique
+  const userObj = res.rowsOfObjects()[0];
+  const hash = userObj.password;
+
+  const passwordCorrect = await deps.compare(password, hash);
+  if (!passwordCorrect) {
+    render('./auth/login.ejs', {message: 'Authentication failed.'});
+    return;
+  }
+
+  await session.set('authenticated', true);
+  await session.set('user', {
+      id: userObj.id,
+      email: userObj.email
+  });
+  response.redirect('/');
 }
 
 const showRegister = async({render}) => {
@@ -30,8 +61,8 @@ const tryRegister = async({request}) => {
     return 'Password must contain at least 4 characters';
   }
 
-  const already_used = await service.areExistingUsers(email);
-  if (already_used) {
+  const rows = await service.getLoginInfo(email);
+  if (rows.length > 0) {
     return 'The email is already reserved.';
   }
 
@@ -45,4 +76,4 @@ const registerUser = async({request, render}) => {
   render('./auth/register.ejs', {message: ret_msg});
 }
 
-export { mainPage, showLogin, showRegister, registerUser };
+export { mainPage, showLogin, login, showRegister, registerUser };
