@@ -400,4 +400,4 @@ const searchSummary = async({request, render}) => {
 
 export { mainPage, showLogin, showRegister, showReportingPage, registerUser,
   reportMorning, submitMorningReport, reportEvening, submitEveningReport,
-  getSummary, searchSummary };
+  getSummary, searchSummary, stringifyDate };
