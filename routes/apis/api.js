@@ -1,5 +1,5 @@
 import * as service from "../../services/summary_service.js";
-import { stringifyDate } from "../controllers/summary_controller.js";
+import { stringifyDate } from "../../utils/utils.js";
 
 const sevenDaysSummary = async({response}) => {
     const today = new Date();
