@@ -1,4 +1,4 @@
-import * as service from "../../services/service.js";
+import * as service from "../../services/report_service.js";
 import * as deps from "../../deps.js";
 
 const showReportingPage = async({render}) => {

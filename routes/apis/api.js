@@ -1,4 +1,4 @@
-import * as service from "../../services/service.js";
+import * as service from "../../services/summary_service.js";
 import { stringifyDate } from "../controllers/summary_controller.js";
 
 const sevenDaysSummary = async({response}) => {

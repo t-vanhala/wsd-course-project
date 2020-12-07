@@ -1,4 +1,4 @@
-import * as service from "../../services/service.js";
+import * as service from "../../services/basic_service.js";
 import * as deps from "../../deps.js";
 
 const mainPage = async({render}) => {
