@@ -1,8 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.78.0/testing/asserts.ts";
-import { superoak } from "https://deno.land/x/superoak@2.3.1/mod.ts";
-import app from "../../app.js";
 import * as utils from "../../utils/utils.js";
-import { Session } from "https://deno.land/x/session@v1.0.0/mod.ts";
 
 Deno.test("Test checkDataNullableReturns true with nullable data", () => {
     const summary = {
