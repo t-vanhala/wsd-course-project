@@ -5,20 +5,14 @@
     <br></br>
 <% } %>
 <h1>Reporting page</h1>
-<% let morning_selected = false %>
-<div>
-    Morning reports: <input id="morning" name="report_selection" type="radio" value="morning" onclick="selectFunction()">
-    Evening reports: <input id="evening" name="report_selection" type="radio" value="evening" onclick="selectFunction()">
-</div>
 <% if (!morning_reporting_done) { %>
     <br><a href="/behavior/reporting/morning">Take me to morning reporting!</a></br>
 <% } else { %>
-    <br><a href="/behavior/reporting/morning">You have already completed morning reporting, click here to change the report</a></br>
+    <br><a href="/behavior/reporting/morning">You have already completed morning reporting for today, click here to change the report</a></br>
 <% } %>
 <% if (!evening_reporting_done) { %>
     <br><a href="/behavior/reporting/evening">Evening reporting is better for me just now!</a></br>
 <% } else { %>
-    <br><a href="/behavior/reporting/evening">You have already completed evening reporting, click here to change the report</a></br>
+    <br><a href="/behavior/reporting/evening">You have already completed evening reporting for today, click here to change the report</a></br>
 <% } %>
-<br><a href="/">Back to landing page</a></br>
 <%- include('../partials/footer.ejs') %>
