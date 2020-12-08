@@ -1,13 +1,20 @@
 <%- include('../partials/header.ejs') %>
-<h1>Register!</h1>
-<form method="POST" action="/auth/registration">
-    <input type="email" name="email" placeholder="Email" />
-    <input type="password" name="password" placeholder="Password" />
-    <input type="password" name="verification" placeholder="Password again" />
-    <input type="submit" value="Submit!" />
-</form>
-<% if (message.length > 0) { %>
-    <p style="color:red"><%= message %></p>
+<% if (user_email.length > 0) { %>
+    <p>You are logged in with email: <%= user_email %></p>
+    <a href="/auth/logout">Logout</a>
+    <br></br>
+    <h2>You already have an account!</h2>
+<% } else { %>
+    <h1>Register!</h1>
+    <form method="POST" action="/auth/registration">
+        <input type="email" name="email" placeholder="Email" />
+        <input type="password" name="password" placeholder="Password" />
+        <input type="password" name="verification" placeholder="Password again" />
+        <input type="submit" value="Submit!" />
+    </form>
+    <% if (message.length > 0) { %>
+        <p style="color:red"><%= message %></p>
+    <% } %>
+    <br><a href="/auth/login">Take me to login page, press here!</a></br>
 <% } %>
-<br><a href="/auth/login">Take me to login page, press here!</a></br>
 <%- include('../partials/footer.ejs') %>

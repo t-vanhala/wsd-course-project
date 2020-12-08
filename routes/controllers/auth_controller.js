@@ -6,8 +6,9 @@ const mainPage = async({render, session}) => {
   render('index.ejs', {user_email: await getLoggedUserEmail(session)});
 };
 
-const showLogin = async({render}) => {
-  render('./auth/login.ejs', {message: ''});
+const showLogin = async({render, session}) => {
+  render('./auth/login.ejs', {user_email: await getLoggedUserEmail(session),
+    message: ''});
 }
 
 const login = async({request, response, render, session}) => {
@@ -19,7 +20,8 @@ const login = async({request, response, render, session}) => {
 
   const res = await service.getLoginInfo(email);
   if (res.rowCount === 0) {
-    render('./auth/login.ejs', {message: 'Invalid email or password'});
+    render('./auth/login.ejs', {user_email: await getLoggedUserEmail(session),
+      message: 'Invalid email or password'});
     return;
   }
 
@@ -29,7 +31,8 @@ const login = async({request, response, render, session}) => {
 
   const passwordCorrect = await deps.compare(password, hash);
   if (!passwordCorrect) {
-    render('./auth/login.ejs', {message: 'Invalid email or password'});
+    render('./auth/login.ejs', {user_email: await getLoggedUserEmail(session),
+      message: 'Invalid email or password'});
     return;
   }
 
@@ -48,8 +51,9 @@ const logout = async({response, session}) => {
   response.redirect('/auth/login');
 }
 
-const showRegister = async({render}) => {
-  render('./auth/register.ejs', {message: ''});
+const showRegister = async({session, render}) => {
+  render('./auth/register.ejs', {user_email: await getLoggedUserEmail(session),
+    message: ''});
 }
 
 // Try register user, return message about operation.
@@ -79,9 +83,10 @@ const tryRegister = async({request}) => {
   return 'Registration successful. You can log in now.';
 };
 
-const registerUser = async({request, render}) => {
+const registerUser = async({request, session, render}) => {
   const ret_msg = await tryRegister({request});
-  render('./auth/register.ejs', {message: ret_msg});
+  render('./auth/register.ejs', {user_email: await getLoggedUserEmail(session),
+    message: ret_msg});
 }
 
 export { mainPage, showLogin, login, logout, showRegister, registerUser };
