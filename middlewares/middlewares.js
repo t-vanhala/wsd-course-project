@@ -10,6 +10,7 @@ const errorMiddleware = async(context, next) => {
 
 const authMiddleware = async({request, response, session}, next) => {
   if (request.url.pathname.startsWith('/behavior') && !(await session.get('authenticated'))) {
+    response.status = 403;
     response.redirect('/auth/login');
   } else {
     await next();

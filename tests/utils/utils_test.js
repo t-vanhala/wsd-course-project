@@ -29,14 +29,14 @@ Deno.test("Test stringifyDate returns random date in correct format", () => {
     assertEquals(utils.stringifyDate(random_day), wanted_format);
 });
 
-Deno.test("Test getSundayFromMonday test case 1", () => {
+Deno.test("Test getSundayFromMonday test case 1, simple", () => {
     const monday = new Date("November 2, 2020");
     const sunday = new Date("November 8, 2020");
     const result_format = sunday.getFullYear() + "-" + (sunday.getMonth() + 1) + "-" + sunday.getDate();
     assertEquals(utils.getSundayFromMonday(monday), result_format);
 });
 
-Deno.test("Test getSundayFromMonday test case 2", () => {
+Deno.test("Test getSundayFromMonday test case 2, harder", () => {
     const monday = new Date("July 30, 2018");
     const sunday = new Date("August 5, 2018");
     const result_format = sunday.getFullYear() + "-" + (sunday.getMonth() + 1) + "-" + sunday.getDate();
@@ -51,6 +51,18 @@ Deno.test("Test getFirstDateOfWeek returns correct day case 1, simple", () => {
 Deno.test("Test getFirstDateOfWeek returns correct day case 2, different months", () => {
     const should_return = new Date("September 28, 2020");
     assertEquals(utils.getFirstDateOfWeek(40, 2020), should_return);
+});
+
+Deno.test("Test Date.getWeek (declared in utils) returns correct week", () => {
+    const random_date = new Date("December 31, 2015");
+    const should_return = 53;
+    assertEquals(random_date.getWeek(), should_return);
+});
+
+Deno.test("Test Date.getWeekYear (declared in utils) returns correct week year, case 1", () => {
+    const random_date = new Date("December 31, 2015");
+    const should_return = 2015;
+    assertEquals(random_date.getWeekYear(), should_return);
 });
 
 Deno.test("Test getMonthFirstDay returns first day of given month", () => {
