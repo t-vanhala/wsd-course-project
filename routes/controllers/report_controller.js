@@ -1,11 +1,10 @@
 import * as service from "../../services/report_service.js";
 import * as deps from "../../deps.js";
-import { getLoggedUserEmail } from "../../utils/utils.js";
+import { getLoggedUserId, getLoggedUserEmail } from "../../utils/utils.js";
 
 const showReportingPage = async({session, render}) => {
   // Check if user has already completed reporting for the day
-  // TODO: use user id from session
-  const user_id = 1; // FIX THIS!
+  const user_id = await getLoggedUserId(session);
   const morning_reporting_done = await service.hasReportedMorning(user_id, null);
   const evening_reporting_done = await service.hasReportedEvening(user_id, null);
   render('./reporting/reporting.ejs', {user_email: await getLoggedUserEmail(session),
@@ -14,7 +13,7 @@ const showReportingPage = async({session, render}) => {
 }
 
 const reportMorning = async({session, render}) => {
-  const user_id = 1; // FIX THIS!
+  const user_id = await getLoggedUserId(session);
   const data = {
     user_email: await getLoggedUserEmail(session),
     this_morning_reported: await service.hasReportedMorning(user_id, ''),
@@ -60,7 +59,7 @@ const submitMorningReport = async({session, request, render}) => {
   const data = await getMorningReportData(session, request);
   // Validate data
   const [passes, errors] = await deps.validate(data, morningReportValidationRules);
-  data.user_id = 1; // FIX THIS! Take value from session..
+  data.user_id = await getLoggedUserId(session);
   data.this_morning_reported = await service.hasReportedMorning(data.user_id, null);
   if (passes) {
     // Lets add data to database
@@ -97,7 +96,7 @@ const submitMorningReport = async({session, request, render}) => {
 }
 
 const reportEvening = async({session, render}) => {
-  const user_id = 1; // FIX THIS!
+  const user_id = await getLoggedUserId(session);
   const data = {
     user_email: await getLoggedUserEmail(session),
     this_evening_reported: await service.hasReportedEvening(user_id, ''),
@@ -146,7 +145,7 @@ const submitEveningReport = async({session, request, render}) => {
   const data = await getEveningReportData(session, request);
   // Validate data
   const [passes, errors] = await deps.validate(data, eveningReportValidationRules);
-  data.user_id = 1; // FIX THIS! Take value from session..
+  data.user_id = await getLoggedUserId(session);
   data.this_evening_reported = await service.hasReportedEvening(data.user_id, null);
   if (passes) {
     // Lets add data to database

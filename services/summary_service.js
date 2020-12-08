@@ -31,7 +31,7 @@ const apiSummary = async(first_day, last_day) => {
   const res = await executeQuery(
     "SELECT AVG(sleep_duration)::numeric(10,2) AS avg_sleep_dur, AVG(time_sports)::numeric(10,2) AS avg_time_sports, AVG(time_studying)::numeric(10,2) AS avg_time_studying, AVG(sleep_quality)::numeric(10,2) AS avg_sleep_quality, AVG(comb.generic_mood)::numeric(10,2) AS avg_gen_mood" +
     " FROM morning_reports, evening_reports," +
-      " (SELECT generic_mood, user_id FROM morning_reports WHERE r_date >= $1 AND r_date <= $2 UNION ALL SELECT generic_mood, user_id FROM evening_reports WHERE r_date >= $1 AND r_date <= $2) AS comb" +
+      " (SELECT generic_mood FROM morning_reports WHERE r_date >= $1 AND r_date <= $2 UNION ALL SELECT generic_mood FROM evening_reports WHERE r_date >= $1 AND r_date <= $2) AS comb" +
       " WHERE morning_reports.r_date >= $1 AND morning_reports.r_date <= $2 AND evening_reports.r_date >= $1 AND evening_reports.r_date <= $2;",
     first_day, last_day);
   

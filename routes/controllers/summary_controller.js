@@ -17,7 +17,7 @@ const data = {
 };
 
 const getSummary = async({session, request, render}) => {
-  const user_id = 1; // FIX THIS!
+  const user_id = await utils.getLoggedUserId(session);
 
   // -- weekly default summary:
 
@@ -49,7 +49,7 @@ const getSummary = async({session, request, render}) => {
 }
 
 const searchSummary = async({session, request, render}) => {
-  const user_id = 1; // FIX THIS!
+  const user_id = await utils.getLoggedUserId(session);
   data.user_email = await utils.getLoggedUserEmail(session);
   const body = request.body();
   const params = await body.value;
