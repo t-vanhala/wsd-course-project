@@ -8,7 +8,7 @@
 /routes: Routes<br/>
 /routes/apis: Application Programming Interfaces<br/>
 /routes/controllers: Controllers<br/>
-/services: Services<br/>
-/tests: Tests for same components under the similar named folders<br/>
-/utils: Utils<br/>
-/views: Views
+/services: Services, e.g. queries to db<br/>
+/tests: Tests for same components under the similarly named folders<br/>
+/utils: Helper functions<br/>
+/views: Used views
