@@ -22,8 +22,17 @@
 <% } else if (today_mood && yesterday_mood && today_mood > yesterday_mood) { %>
     <p style="color:yellow">Things are looking bright today!</p>
 <% } %>
-<% if (user_email.length === 0) { %>
+<% if (user_email.length > 0) { %>
+    <br><a href="/behavior/reporting">To reporting page!</a></br>
+    <br><a href="/behavior/summary">To summary page!</a></br>
+<% } else { %>
     <br><a href="/auth/login">Hi user! Please start by signing in!</a></br>
     <br><a href="/auth/registration">Whaat! You are not user yet? Register now</a></br>
-<% } %>
+<% } %>
+<br></br>
+<p>Remember our API! It is accessible on addresses:</p>
+<ul>
+    <p>/api/summary</p>
+    <p>/api/summary/:year/:month/:day</p>
+</ul>
 <%- include('./partials/footer.ejs') %>
