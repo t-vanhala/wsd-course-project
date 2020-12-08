@@ -1,5 +1,18 @@
 import { executeQuery } from "../database/database.js";
 
+const getUsersDayAvgMood = async(day) => {
+  const res = await executeQuery(
+    "SELECT AVG(comb.generic_mood)::numeric(10,2) AS avg_gen_mood" +
+      " FROM (SELECT generic_mood FROM morning_reports WHERE r_date = $1" +
+        " UNION ALL SELECT generic_mood FROM evening_reports WHERE r_date = $1) AS comb;",
+    day);
+  
+  if (res && res.rowCount > 0) {
+    return res.rowsOfObjects();
+  }
+  return [];
+}
+
 const getSummaryBetweenDays = async(user_id, first_day, last_day) => {
   const res = await executeQuery(
     "SELECT AVG(sleep_duration)::numeric(10,2) AS avg_sleep_dur, AVG(time_sports)::numeric(10,2) AS avg_time_sports, AVG(time_studying)::numeric(10,2) AS avg_time_studying, AVG(comb.generic_mood)::numeric(10,2) AS avg_gen_mood" +
@@ -28,4 +41,4 @@ const apiSummary = async(first_day, last_day) => {
   return [];
 }
 
-export { getSummaryBetweenDays, apiSummary };
+export { getUsersDayAvgMood, getSummaryBetweenDays, apiSummary };

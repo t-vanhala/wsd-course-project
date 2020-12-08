@@ -1,9 +1,19 @@
 import * as service from "../../services/basic_service.js";
+import { getUsersDayAvgMood } from "../../services/summary_service.js";
 import * as deps from "../../deps.js";
-import { getLoggedUserEmail } from "../../utils/utils.js";
+import { stringifyDate, getLoggedUserEmail } from "../../utils/utils.js";
 
 const mainPage = async({render, session}) => {
-  render('index.ejs', {user_email: await getLoggedUserEmail(session)});
+  // Today and yesterday avg moods for the landing page
+  const today = new Date();
+  const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+  const res_today = await getUsersDayAvgMood(stringifyDate(today));
+  const res_yesterday = await getUsersDayAvgMood(stringifyDate(yesterday));
+
+  const today_mood = res_today[0].avg_gen_mood;
+  const yesterday_mood = res_yesterday[0].avg_gen_mood;
+  render('index.ejs', {user_email: await getLoggedUserEmail(session),
+    today_mood: today_mood, yesterday_mood: yesterday_mood});
 };
 
 const showLogin = async({render, session}) => {

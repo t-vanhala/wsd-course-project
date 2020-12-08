@@ -5,6 +5,25 @@
     <br></br>
 <% } %>
 <h1>Life Monitor App</h1>
-<br><a href="/auth/login">Hi user! Please start by signing in!</a></br>
-<br><a href="/auth/registration">Whaat! You are not user yet? Register now</a></br>
+<h4>Application for self-monitoring purposes. The application provides users an opportunity to report behavior daily.</h4>
+<br></br>
+<% if (today_mood) { %>
+    <p>Users average mood today has been <%= today_mood %></p>
+<% } else { %>
+    <p>No enough data for calculating users average mood for today!</p>
+<% } %>
+<% if (yesterday_mood) { %>
+    <p>Users average mood yesterday has been <%= yesterday_mood %></p>
+<% } else { %>
+    <p>No enough data for calculating users average mood for yesterday!</p>
+<% } %>
+<% if (today_mood && yesterday_mood && yesterday_mood > today_mood) { %>
+    <p style="color:blueviolet">Things are looking gloomy today!</p>
+<% } else if (today_mood && yesterday_mood && today_mood > yesterday_mood) { %>
+    <p style="color:yellow">Things are looking bright today!</p>
+<% } %>
+<% if (user_email.length === 0) { %>
+    <br><a href="/auth/login">Hi user! Please start by signing in!</a></br>
+    <br><a href="/auth/registration">Whaat! You are not user yet? Register now</a></br>
+<% } %>
 <%- include('./partials/footer.ejs') %>
