@@ -1,7 +1,7 @@
 import { Application } from "./deps.js";
 import { router } from "./routes/routes.js";
 import * as middleware from "./middlewares/middlewares.js";
-import { viewEngine, engineFactory, adapterFactory, Session } from "./deps.js";
+import { viewEngine, engineFactory, adapterFactory, Session, oakCors } from "./deps.js";
 
 const app = new Application();
 
@@ -21,6 +21,7 @@ app.use(middleware.authMiddleware);
 app.use(middleware.requestTimingMiddleware);
 app.use(middleware.serveStaticFiles);
 
+app.use(oakCors());
 app.use(router.routes());
 
 if (!Deno.env.get('TEST_ENVIRONMENT')) {
