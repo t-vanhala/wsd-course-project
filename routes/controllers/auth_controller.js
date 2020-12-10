@@ -62,41 +62,83 @@ const logout = async({response, session}) => {
 }
 
 const showRegister = async({session, render}) => {
-  render('./auth/register.ejs', {user_email: await getLoggedUserEmail(session),
-    message: ''});
+  const data = {
+    user_email: await getLoggedUserEmail(session),
+    email_to_show: "",
+    errors: [],
+    simple_error: "",
+    success: "",
+  }
+  render('./auth/register.ejs', data);
 }
+
+const registerValidationRules = {
+  email: [deps.required, deps.isEmail],
+  password: [deps.required, deps.minLength(4)],
+  verification: [deps.required, deps.minLength(4)],
+};
 
 // Try register user, return message about operation.
 const tryRegister = async({request}) => {
   const body = request.body();
   const params = await body.value;
+
+  const data = {
+    email: "",
+    password: "",
+    verification: "",
+  }
   
-  const email = params.get('email');
-  const password = params.get('password');
-  const verification = params.get('verification');
+  data.email = params.get('email');
+  data.password = params.get('password');
+  data.verification = params.get('verification');
 
-  if (password !== verification) {
-    return 'The entered passwords did not match';
+  const [passes, errors] = await deps.validate(data, registerValidationRules);
+  if (!passes) {
+    errors.email_to_show = data.email;
+    return errors;
   }
 
-  if (password.length < 4) {
-    return 'Password must contain at least 4 characters';
+  const msgs = {
+    email: "",
+    password: "",
+    verification: "",
+    email_to_show: data.email,
+    simple_error: "",
+    success: "",
+  }
+  if (data.password !== data.verification) {
+    msgs.simple_error = 'The entered passwords did not match';
+    return msgs;
   }
 
-  const rows = await service.getLoginInfo(email);
+  const rows = await service.getLoginInfo(data.email);
   if (rows.length > 0) {
-    return 'The email is already reserved.';
+    msgs.simple_error = 'The email is already reserved.'
+    return msgs;
   }
 
-  const hash = await deps.hash(password);
-  await service.addUser(email, hash);
-  return 'Registration successful. You can log in now.';
+  const hash = await deps.hash(data.password);
+  await service.addUser(data.email, hash);
+  msgs.email_to_show = '';
+  msgs.success = 'Registration successful. You can log in now.';
+  return msgs;
 };
 
 const registerUser = async({request, session, render}) => {
-  const ret_msg = await tryRegister({request});
-  render('./auth/register.ejs', {user_email: await getLoggedUserEmail(session),
-    message: ret_msg});
+  const ret_msgs = await tryRegister({request});
+  const data = {
+    user_email: await getLoggedUserEmail(session),
+    email_to_show: ret_msgs.email_to_show,
+    errors: ret_msgs,
+    simple_error: "",
+    success: "",
+  }
+  if (ret_msgs.simple_error && ret_msgs.simple_error.length > 0)
+    data.simple_error = ret_msgs.simple_error;
+  if (ret_msgs.success && ret_msgs.success.length > 0)
+    data.success = ret_msgs.success;
+  render('./auth/register.ejs', data);
 }
 
 export { mainPage, showLogin, login, logout, showRegister, registerUser };

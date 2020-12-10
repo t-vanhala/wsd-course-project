@@ -7,13 +7,22 @@
 <% } else { %>
     <h1>Register!</h1>
     <form method="POST" action="/auth/registration">
-        <input type="email" name="email" placeholder="Email" />
+        <label for="email">Email</label>
+        <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'email'}) %>
+        <input type="email" name="email" value="<%= email_to_show %>" placeholder="Email" />
+        <label for="password">Password</label>
+        <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'password'}) %>
         <input type="password" name="password" placeholder="Password" />
+        <label for="verification">Verify password</label>
+        <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'verification'}) %>
         <input type="password" name="verification" placeholder="Password again" />
         <input type="submit" value="Submit!" />
     </form>
-    <% if (message.length > 0) { %>
-        <p style="color:red"><%= message %></p>
+    <% if (simple_error.length > 0) { %>
+        <p style="color:red"><%= simple_error %></p>
+    <% } %>
+    <% if (success.length > 0) { %>
+        <p style="color:green"><%= success %></p>
     <% } %>
     <br><a href="/auth/login">Take me to login page, press here!</a></br>
 <% } %>
