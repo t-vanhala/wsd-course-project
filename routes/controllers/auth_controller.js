@@ -113,7 +113,7 @@ const tryRegister = async({request}) => {
   }
 
   const rows = await service.getLoginInfo(data.email);
-  if (rows.length > 0) {
+  if (rows.rowCount > 0) {
     msgs.simple_error = 'The email is already reserved.'
     return msgs;
   }
