@@ -13,6 +13,7 @@ CREATE TABLE morning_reports (
     generic_mood INTEGER CHECK(generic_mood <= 5 AND generic_mood >= 1),
     user_id INTEGER REFERENCES users(id)
 );
+CREATE INDEX idx_mr_r_date ON morning_reports(r_date);
 
 CREATE TABLE evening_reports (
     id SERIAL PRIMARY KEY,
@@ -23,3 +24,4 @@ CREATE TABLE evening_reports (
     generic_mood INTEGER CHECK(generic_mood <= 5 AND generic_mood >= 1),
     user_id INTEGER REFERENCES users(id)
 );
+CREATE INDEX idx_er_r_date ON evening_reports(r_date);
