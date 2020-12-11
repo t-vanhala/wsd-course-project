@@ -72,25 +72,13 @@ const submitMorningReport = async({session, request, render}) => {
   if (passes) {
     // Lets add data to database
     
-    // First check if date is given
-    if (data.date) {
-      // Check if given date is reported
-      if (await service.hasReportedMorning(data.user_id, data.date)) {
-        // Update report
-        service.updateMorningReport(data);
-      } else {
-        // Create a new report for that day
-        service.addMorningReport(data);
-      }
+    // Check if given date is reported
+    if (await service.hasReportedMorning(data.user_id, data.date)) {
+      // Update report
+      service.updateMorningReport(data);
     } else {
-      // Date not given, and we know if today has been reported
-      if (data.this_morning_reported) {
-        // Update this morning report
-        service.updateMorningReport(data);
-      } else {
-        // Add new report for this morning
-        service.addMorningReport(data);
-      }
+      // Create a new report for that day
+      service.addMorningReport(data);
     }
 
     data.message = "Report submitted!";
@@ -174,25 +162,13 @@ const submitEveningReport = async({session, request, render}) => {
   if (passes) {
     // Lets add data to database
     
-    // First check if date is given
-    if (data.date) {
-      // Check if given date is reported
-      if (await service.hasReportedEvening(data.user_id, data.date)) {
-        // Update report
-        service.updateEveningReport(data);
-      } else {
-        // Create a new report for that day
-        service.addEveningReport(data);
-      }
+    // Check if given date is reported
+    if (await service.hasReportedEvening(data.user_id, data.date)) {
+      // Update report
+      service.updateEveningReport(data);
     } else {
-      // Date not given, and we know if today has been reported
-      if (data.this_evening_reported) {
-        // Update this evening report
-        service.updateEveningReport(data);
-      } else {
-        // Add new report for this evening
-        service.addEveningReport(data);
-      }
+      // Create a new report for that day
+      service.addEveningReport(data);
     }
 
     data.message = "Report submitted!";
