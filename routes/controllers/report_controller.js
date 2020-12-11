@@ -100,6 +100,11 @@ const reportEvening = async({session, render}) => {
   const data = {
     user_email: await getLoggedUserEmail(session),
     this_evening_reported: await service.hasReportedEvening(user_id, ''),
+    populate_date: "",
+    populate_se: 0,
+    populate_st: 0,
+    populate_re: [false, false, false, false, false],
+    populate_gm: [false, false, false, false, false],
     errors: null,
     message: ""
   }
@@ -120,10 +125,15 @@ const getEveningReportData = async(session, request) => {
     user_id: "",
     this_evening_reported: "",
     date: null,
+    populate_date: "",
     sports_and_exercises: "",
+    populate_se: 0,
     studying: "",
+    populate_st: 0,
     reg_and_eating: "",
+    populate_re: [false, false, false, false, false],
     generic_mood: "",
+    populate_gm: [false, false, false, false, false],
     errors: null,
     message: ""
   };
@@ -174,6 +184,13 @@ const submitEveningReport = async({session, request, render}) => {
     data.message = "Report submitted!";
     render('./reporting/evening_reports.ejs', data);
   } else {
+    // Populate values
+    data.populate_re[data.reg_and_eating - 1] = true;
+    data.populate_gm[data.generic_mood - 1] = true;
+    data.populate_date = data.date;
+    data.populate_se = data.sports_and_exercises;
+    data.populate_st = data.studying;
+
     // Data is not added to db. Show errors to user.
     data.errors = errors;
     data.message = "Report not submitted!";
