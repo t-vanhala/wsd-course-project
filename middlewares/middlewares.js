@@ -18,6 +18,13 @@ const authMiddleware = async({request, response, session}, next) => {
   }
 };
 
+const requestTimingMiddleware = async({ request }, next) => {
+  const start = Date.now();
+  await next();
+  const ms = Date.now() - start;
+  console.log(`Request ${request.method} to path ${request.url.pathname} took ${ms} ms`);
+}
+
 const logMiddleware = async({ request, session }, next) => {
   const current_time = new Date();
   if (await session.get('user')) {
@@ -40,4 +47,4 @@ const serveStaticFiles = async (context, next) => {
   }
 }
 
-export { errorMiddleware, authMiddleware, logMiddleware, serveStaticFiles };
+export { errorMiddleware, authMiddleware, requestTimingMiddleware, logMiddleware, serveStaticFiles };

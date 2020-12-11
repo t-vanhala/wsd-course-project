@@ -18,6 +18,7 @@ app.use(session.use()(session));
 // Use middlewares
 app.use(middleware.errorMiddleware);
 app.use(middleware.authMiddleware);
+app.use(middleware.requestTimingMiddleware);
 app.use(middleware.logMiddleware);
 app.use(middleware.serveStaticFiles);
 
