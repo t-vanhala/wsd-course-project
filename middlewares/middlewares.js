@@ -1,4 +1,5 @@
 import { send } from "../deps.js";
+import { getLoggedUserId } from "../utils/utils.js";
 
 const errorMiddleware = async(context, next) => {
   try {
@@ -17,11 +18,15 @@ const authMiddleware = async({request, response, session}, next) => {
   }
 };
 
-const requestTimingMiddleware = async({ request }, next) => {
-  const start = Date.now();
+const logMiddleware = async({ request, session }, next) => {
+  const current_time = new Date();
+  if (await session.get('user')) {
+    const user = await getLoggedUserId(session);
+    console.log(`Time: ${current_time} Method: ${request.method} Path: ${request.url.pathname} User: ${user}`);
+  } else {
+    console.log(`Time: ${current_time} Method: ${request.method} Path: ${request.url.pathname} User: Anonymous`);
+  }
   await next();
-  const ms = Date.now() - start;
-  console.log(`${request.method} ${request.url.pathname} - ${ms} ms`);
 }
 
 const serveStaticFiles = async (context, next) => {
@@ -35,4 +40,4 @@ const serveStaticFiles = async (context, next) => {
   }
 }
 
-export { errorMiddleware, authMiddleware, requestTimingMiddleware, serveStaticFiles };
+export { errorMiddleware, authMiddleware, logMiddleware, serveStaticFiles };
