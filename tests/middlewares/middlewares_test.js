@@ -7,9 +7,14 @@ const fun = () => {
 const fun2 = () => {
     throw Error('hello!');
 };
-Deno.test("Test error middleware", async()=> {
-    await middlewares.errorMiddleware(fun, fun);
-    await middlewares.errorMiddleware(fun, fun2);
+Deno.test({
+    name: "Test error middleware", 
+    async fn() {
+        await middlewares.errorMiddleware(fun, fun);
+        await middlewares.errorMiddleware(fun, fun2);
+    },
+    sanitizeResources: false,
+    sanitizeOps: false
 });
 
 const url = {
@@ -20,12 +25,22 @@ const request = {
     method: "get",
     url: url
 };
-Deno.test("Test timing middleware", async() => {
-    await middlewares.requestTimingMiddleware({request}, fun);
+Deno.test({
+    name: "Test timing middleware", 
+    async fn() {
+        await middlewares.requestTimingMiddleware({request}, fun);
+    },
+    sanitizeResources: false,
+    sanitizeOps: false
 });
 
-Deno.test("Test serving middleware", async () => {
-    const testClient = await superoak(app);
-    await testClient.post("/static/test")
-        .expect(404);
+Deno.test({
+    name: "Test serving middleware", 
+    async fn() {
+        const testClient = await superoak(app);
+        await testClient.post("/static/test")
+            .expect(404);
+    },
+    sanitizeResources: false,
+    sanitizeOps: false
 });
