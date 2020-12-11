@@ -1,6 +1,6 @@
 import * as service from "../../services/report_service.js";
 import * as deps from "../../deps.js";
-import { getLoggedUserId, getLoggedUserEmail } from "../../utils/utils.js";
+import { stringifyDate, getLoggedUserId, getLoggedUserEmail } from "../../utils/utils.js";
 
 const showReportingPage = async({session, render}) => {
   // Check if user has already completed reporting for the day
@@ -17,7 +17,7 @@ const reportMorning = async({session, render}) => {
   const data = {
     user_email: await getLoggedUserEmail(session),
     this_morning_reported: await service.hasReportedMorning(user_id, ''),
-    populate_date: "",
+    populate_date: stringifyDate(new Date()),
     populate_sd: 0,
     populate_sq: [false, false, false, false, false],
     populate_gm: [false, false, false, false, false],
@@ -40,7 +40,7 @@ const getMorningReportData = async(session, request) => {
     user_id: "",
     this_morning_reported: "",
     date: null,
-    populate_date: "",
+    populate_date: stringifyDate(new Date()),
     sleep_duration: "",
     populate_sd: 0,
     sleep_quality: "",
@@ -114,7 +114,7 @@ const reportEvening = async({session, render}) => {
   const data = {
     user_email: await getLoggedUserEmail(session),
     this_evening_reported: await service.hasReportedEvening(user_id, ''),
-    populate_date: "",
+    populate_date: stringifyDate(new Date()),
     populate_se: 0,
     populate_st: 0,
     populate_re: [false, false, false, false, false],
@@ -139,7 +139,7 @@ const getEveningReportData = async(session, request) => {
     user_id: "",
     this_evening_reported: "",
     date: null,
-    populate_date: "",
+    populate_date: stringifyDate(new Date()),
     sports_and_exercises: "",
     populate_se: 0,
     studying: "",
