@@ -17,6 +17,10 @@ const reportMorning = async({session, render}) => {
   const data = {
     user_email: await getLoggedUserEmail(session),
     this_morning_reported: await service.hasReportedMorning(user_id, ''),
+    populate_date: "",
+    populate_sd: 0,
+    populate_sq: [false, false, false, false, false],
+    populate_gm: [false, false, false, false, false],
     errors: null,
     message: ""
   }
@@ -36,9 +40,13 @@ const getMorningReportData = async(session, request) => {
     user_id: "",
     this_morning_reported: "",
     date: null,
+    populate_date: "",
     sleep_duration: "",
+    populate_sd: 0,
     sleep_quality: "",
+    populate_sq: [false, false, false, false, false],
     generic_mood: "",
+    populate_gm: [false, false, false, false, false],
     errors: null,
     message: ""
   };
@@ -88,6 +96,12 @@ const submitMorningReport = async({session, request, render}) => {
     data.message = "Report submitted!";
     render('./reporting/morning_report.ejs', data);
   } else {
+    // Populate values
+    data.populate_sq[data.sleep_quality - 1] = true;
+    data.populate_gm[data.generic_mood - 1] = true;
+    data.populate_date = data.date;
+    data.populate_sd = data.sleep_duration;
+
     // Data is not added to db. Show errors to user.
     data.errors = errors;
     data.message = "Report not submitted!";
