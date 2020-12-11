@@ -14,18 +14,18 @@
 <form method="POST" action="/behavior/reporting/morning">
     <br>
     <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'date'}) %>
-    <p>Day to report. Can be empty, when current date is used.</p>
+    <label for="date">Day to report. Can be empty, when current date is used.</label>
     <input type="date" name="date" />
     </br>
     <br>
     <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'sleep_duration'}) %>
-    <p>Sleep duration from 0 to 24h. Decimals are accepted.</p>
+    <label for="sleep_duration">Sleep duration from 0 to 24h. Decimals are accepted.</label>
     <input type="number" name="sleep_duration" step=".1" min=0 max=24 value="0" />
     </br>
     <br>
     <div>
         <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'sleep_quality'}) %>
-        <p>Sleep quality:</p>
+        <label for="sleep_quality">Sleep quality:</label>
         1 <input name="sleep_quality" type="radio" value="1"/>
         2 <input name="sleep_quality" type="radio" value="2"/>
         3 <input name="sleep_quality" type="radio" value="3"/>
@@ -36,7 +36,7 @@
     <br>
     <div>
         <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'generic_mood'}) %>
-        <p>Generic mood:</p>
+        <label for="generic_mood">Generic mood:</label>
         1 <input name="generic_mood" type="radio" value="1"/>
         2 <input name="generic_mood" type="radio" value="2"/>
         3 <input name="generic_mood" type="radio" value="3"/>

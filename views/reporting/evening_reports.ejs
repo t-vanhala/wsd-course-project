@@ -14,23 +14,23 @@
 <form method="POST" action="/behavior/reporting/evening">
     <br>
     <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'date'}) %>
-    <p>Day to report. Can be empty, when current date is used.</p>
+    <label for="date">Day to report. Can be empty, when current date is used.</label>
     <input type="date" name="date" />
     </br>
     <br>
     <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'sports_and_exercises'}) %>
-    <p>Time spent on sports and exercise from 0 to 24h. Decimals are accepted.</p>
+    <label for="sports_and_exercises">Time spent on sports and exercise from 0 to 24h. Decimals are accepted.</label>
     <input type="number" name="sports_and_exercises" step=".1" min=0 max=24 value="0" />
     </br>
     <br>
     <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'studying'}) %>
-    <p>Time spent on studying from 0 to 24h. Decimals are accepted.</p>
+    <label for="studying">Time spent on studying from 0 to 24h. Decimals are accepted.</label>
     <input type="number" name="studying" step=".1" min=0 max=24 value="0" />
     </br>
     <br>
     <div>
         <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'reg_and_eating'}) %>
-        <p>Regularity and quality of eating:</p>
+        <label for="reg_and_eating">Regularity and quality of eating:</label>
         1 <input name="reg_and_eating" type="radio" value="1"/>
         2 <input name="reg_and_eating" type="radio" value="2"/>
         3 <input name="reg_and_eating" type="radio" value="3"/>
@@ -41,7 +41,7 @@
     <br>
     <div>
         <%- include('../partials/print_errors.ejs', { errors: errors, attribute: 'generic_mood'}) %>
-        <p>Generic mood:</p>
+        <label for="generic_mood">Generic mood:</label>
         1 <input name="generic_mood" type="radio" value="1"/>
         2 <input name="generic_mood" type="radio" value="2"/>
         3 <input name="generic_mood" type="radio" value="3"/>
