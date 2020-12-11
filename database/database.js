@@ -3,17 +3,18 @@ import { config } from "../config/config.js";
 
 const CONCURRENT_CONNECTIONS = 5;
 
-const client = new Pool(config.database, CONCURRENT_CONNECTIONS);
+const connectionPool = new Pool(config.database, CONCURRENT_CONNECTIONS);
 
 const executeQuery = async(query, ...args) => {
-  await client.connect();
+  const client = await connectionPool.connect();
   try {
     return await client.query(query, ...args);
   } catch (e) {
     console.log(e);
   } finally {
-    await client.end();
+    await client.release();
   }
+  return null;
 }
 
 export { executeQuery };
